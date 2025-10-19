@@ -1,3 +1,6 @@
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
+using PROG_POE_CMCS.Data;
 namespace PROG_POE_CMCS
 {
     public class Program
@@ -5,6 +8,8 @@ namespace PROG_POE_CMCS
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
+            builder.Services.AddDbContext<PROG_POE_CMCSContext>(options =>
+                options.UseSqlServer(builder.Configuration.GetConnectionString("PROG_POE_CMCSContext") ?? throw new InvalidOperationException("Connection string 'PROG_POE_CMCSContext' not found.")));
 
             // Add services to the container.
             builder.Services.AddControllersWithViews();

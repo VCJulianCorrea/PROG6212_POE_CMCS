@@ -1,0 +1,246 @@
+﻿@{
+    ViewData["Title"] = "Uploader";
+}
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Claims Input</title>
+    <style>
+        :root{--accent:#2563eb;--bg:#f7fafc;--card:#ffffff;--muted:#6b7280}
+
+        html, body {
+            height: 100%;
+            margin: 0;
+            overflow-y: auto;
+            font-family: Inter, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
+            color: #0f172a;
+            background: var(--bg)
+        }
+        .container{max-width:920px;margin:36px auto;padding:20px}
+        header{display:flex;align-items:center;gap:12px;margin-bottom:18px}
+        h1{font-size:20px;margin:0}
+        .card{background:var(--card);border-radius:12px;padding:18px;box-shadow:0 6px 18px rgba(12,15,20,.06)}
+        .grid{display:grid;grid-template-columns:1fr 320px;gap:18px}
+        media (max-width:880px){.grid{grid-template-columns:1fr} }
+        label{display:block;font-weight:600;margin-bottom:6px}
+        .field{margin-bottom:12px}
+        input[type="text"],input[type="number"],textarea,select{width:100%;padding:10px;border:1px solid #e6e9ee;border-radius:8px;font-size:14px}
+        textarea{min-height:120px;resize:vertical}
+        .row{display:flex;gap:12px}
+        .small{width:100px}
+        .muted{color:var(--muted);font-size:13px}
+        .file-drop{border:2px dashed #e2e8f0;border-radius:10px;padding:14px;text-align:center;cursor:pointer}
+        .file-list{margin-top:10px}
+        .file-item{display:flex;align-items:center;gap:8px;padding:8px;border-radius:8px;background:#fbfdff;border:1px solid #eef2ff}
+        .file-item button{margin-left:auto;background:transparent;border:0;color:#ef4444;cursor:pointer}
+        .summary{background:#f8fafc;border-radius:10px;padding:12px}
+        .big-amount{font-size:20px;font-weight:700;margin-top:6px}
+        .actions{display:flex;gap:10px;justify-content:flex-end;margin-top:14px}
+        button.primary{background:var(--accent);color:white;border:0;padding:10px 16px;border-radius:10px;cursor:pointer}
+        button.ghost{background:transparent;border:1px solid #e6e9ee;padding:10px 12px;border-radius:10px;cursor:pointer}
+        .note{font-size:13px;color:var(--muted)}
+        .success{padding:10px;background:#ecfdf5;border-radius:8px;color:#065f46;margin-top:12px}
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <svg width="36" height="36" viewBox="0 0 24 24" fill="none" aria-hidden><path d="M12 2a3 3 0 0 1 3 3v2h2a3 3 0 0 1 3 3v7a3 3 0 0 1-3 3H7a3 3 0 0 1-3-3V6a3 3 0 0 1 3-3h5z" stroke="#2563eb" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" /></svg>
+            <div>
+                <h1>Submit a Claim</h1>
+                <div class="muted">Enter claim details, hours worked, hourly rate and upload supporting documents.</div>
+            </div>
+        </header>
+
+        <form id="claimForm" class="card" novalidate>
+            <div class="grid">
+                <div>
+                    <div class="field">
+                        <label for="claimTitle">Claim title</label>
+                        <input id="claimTitle" name="claimTitle" type="text" placeholder="Short descriptive title" required />
+                    </div>
+
+                    <div class="field">
+                        <label for="claimDesc">Claim description</label>
+                        <textarea id="claimDesc" name="claimDesc" placeholder="Describe the work, reason for claim, dates, etc." required></textarea>
+                    </div>
+
+                    <div class="row">
+                        <div class="field" style="flex:1">
+                            <label for="hours">Hours worked</label>
+                            <input id="hours" name="hours" type="number" inputmode="decimal" step="0.01" min="0" placeholder="0.00" required />
+                        </div>
+
+                        <div class="field" style="width:220px">
+                            <label for="rate">Hourly rate</label>
+                            <div style="display:flex;gap:8px;align-items:center">
+                                <span class="muted">R</span>
+                                <input id="rate" name="rate" type="number" inputmode="decimal" step="0.01" min="0" placeholder="0.00" style="flex:1" required />
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="field">
+                        <label for="attachments">Supporting documents</label>
+                        <div id="fileDrop" class="file-drop" tabindex="0">
+                            <input id="attachments" name="attachments" type="file" accept=".pdf,.doc,.docx,.jpg,.jpeg,.png" multiple style="display:none" />
+                            <div id="fileDropText">Click or drag files here to upload (PDF, DOC, images). Max 10 files.</div>
+                            <div class="note">You can select multiple files. Maximum total size per upload: 25 MB (client-side check).</div>
+                        </div>
+                        <div id="fileList" class="file-list" aria-live="polite"></div>
+                    </div>
+
+                    <div class="field">
+                        <label for="notes">Additional notes (optional)</label>
+                        <textarea id="notes" name="notes" placeholder="Any extra information for processing the claim"></textarea>
+                    </div>
+                </div>
+
+                <aside>
+                    <div class="summary">
+                        <div class="muted">Claim summary</div>
+                        <div style="margin-top:10px">
+                            <div>Hours: <strong id="sumHours">0</strong></div>
+                            <div>Rate: <strong id="sumRate">R 0.00</strong></div>
+                            <div class="big-amount">Total: <span id="sumTotal">R 0.00</span></div>
+                        </div>
+
+                        <hr style="margin:12px 0;border-color:#eef2ff" />
+                        <div class="muted">Upload status</div>
+                        <div id="uploadStatus" style="margin-top:8px">No files selected</div>
+
+                        <div style="margin-top:12px">
+                            <button type="button" id="calcBtn" class="ghost" style="width:100%">Recalculate</button>
+                        </div>
+
+                    </div>
+                </aside>
+            </div>
+
+            <div class="actions">
+                <a asp-action="Index">Cancel</a>
+                <button type="reset" class="ghost">Reset</button>
+                <button type="submit" class="primary">Submit claim</button>
+            </div>
+
+            <div id="resultMessage" aria-live="polite"></div>
+        </form>
+    </div>
+
+    <script>
+        (function(){
+          const form = document.getElementById('claimForm');
+          const hoursInput = document.getElementById('hours');
+          const rateInput = document.getElementById('rate');
+          const sumHours = document.getElementById('sumHours');
+          const sumRate = document.getElementById('sumRate');
+          const sumTotal = document.getElementById('sumTotal');
+          const calcBtn = document.getElementById('calcBtn');
+          const fileDrop = document.getElementById('fileDrop');
+          const fileInput = document.getElementById('attachments');
+          const fileList = document.getElementById('fileList');
+          const uploadStatus = document.getElementById('uploadStatus');
+          const resultMessage = document.getElementById('resultMessage');
+
+          let files = [];
+          const MAX_FILES = 10;
+          const MAX_TOTAL_SIZE = 25 * 1024 * 1024; // 25MB
+
+          function formatCurrency(num){
+            return 'R ' + Number(num || 0).toLocaleString(undefined,{minimumFractionDigits:2,maximumFractionDigits:2});
+          }
+
+          function refreshSummary(){
+            const h = parseFloat(hoursInput.value) || 0;
+            const r = parseFloat(rateInput.value) || 0;
+            sumHours.textContent = h.toFixed(2);
+            sumRate.textContent = formatCurrency(r);
+            sumTotal.textContent = formatCurrency((h * r).toFixed(2));
+          }
+
+          hoursInput.addEventListener('input', refreshSummary);
+          rateInput.addEventListener('input', refreshSummary);
+          calcBtn.addEventListener('click', refreshSummary);
+
+          // file handling UI
+          function updateFileList(){
+            fileList.innerHTML = '';
+            if(files.length === 0){
+              uploadStatus.textContent = 'No files selected';
+              return;
+            }
+            let totalSize = 0;
+            files.forEach((f, idx) => { totalSize += f.size; const item = document.createElement('div'); item.className='file-item'; item.innerHTML = `<div style="font-size:13px">${f.name}</div><div class="muted" style="font-size:12px">${(f.size/1024).toFixed(1)} KB</div>`;
+              const removeBtn = document.createElement('button'); removeBtn.type='button'; removeBtn.title='Remove file'; removeBtn.innerHTML = 'Remove'; removeBtn.addEventListener('click', ()=>{ files.splice(idx,1); updateFileList(); });
+              item.appendChild(removeBtn);
+              fileList.appendChild(item);
+            });
+            uploadStatus.textContent = `${files.length} file(s), total ${(totalSize/1024/1024).toFixed(2)} MB`;
+          }
+
+          function handleFiles(selected){
+            const incoming = Array.from(selected);
+            if(files.length + incoming.length > MAX_FILES){ alert(`You can upload up to ${MAX_FILES} files.`); return; }
+            // simple total size check
+            const currentSize = files.reduce((s,f)=>s+f.size,0);
+            const incomingSize = incoming.reduce((s,f)=>s+f.size,0);
+            if(currentSize + incomingSize > MAX_TOTAL_SIZE){ alert('Total upload size exceeds 25 MB limit.'); return; }
+            files = files.concat(incoming);
+            updateFileList();
+          }
+
+          // drag & drop
+          ['dragenter','dragover'].forEach(ev=> fileDrop.addEventListener(ev, e=>{ e.preventDefault(); fileDrop.style.borderColor='#c7def8'; }));
+          ['dragleave','drop'].forEach(ev=> fileDrop.addEventListener(ev, e=>{ e.preventDefault(); fileDrop.style.borderColor='#e2e8f0'; }));
+          fileDrop.addEventListener('drop', e=>{ if(e.dataTransfer && e.dataTransfer.files) handleFiles(e.dataTransfer.files); });
+          fileDrop.addEventListener('click', ()=> fileInput.click());
+          fileInput.addEventListener('change', e=> handleFiles(e.target.files));
+          fileDrop.addEventListener('keydown', e=>{ if(e.key === 'Enter' || e.key === ' ') { e.preventDefault(); fileInput.click(); } });
+
+          // form submit (demo - replace with real submission)
+          form.addEventListener('submit', async (e)=>{
+            e.preventDefault();
+            resultMessage.innerHTML='';
+
+            // basic validation
+            const title = document.getElementById('claimTitle').value.trim();
+            const desc = document.getElementById('claimDesc').value.trim();
+            const h = parseFloat(hoursInput.value) || 0;
+            const r = parseFloat(rateInput.value) || 0;
+            if(!title){ alert('Please provide a claim title.'); return; }
+            if(!desc){ alert('Please enter a claim description.'); return; }
+            if(h <= 0){ alert('Please enter hours worked greater than 0.'); return; }
+            if(r < 0){ alert('Please enter a valid hourly rate.'); return; }
+
+            // create FormData to send to server endpoint
+            const fd = new FormData();
+            fd.append('title', title);
+            fd.append('description', desc);
+            fd.append('hours', h);
+            fd.append('rate', r);
+            fd.append('notes', document.getElementById('notes').value || '');
+            files.forEach((f, i)=> fd.append('attachments', f));
+
+            // demo: show payload summary instead of actually sending
+            resultMessage.innerHTML = `<div class="success">Preparing to submit claim — <strong>${title}</strong>. Files: ${files.length}. Total: ${formatCurrency(h * r)}</div>`;
+
+            // If you want to actually POST to a server, uncomment and change the URL below:
+            // try{
+            //   const resp = await fetch('/api/claims', { method: 'POST', body: fd });
+            //   if(!resp.ok) throw new Error('Network error');
+            //   resultMessage.innerHTML = '<div class="success">Claim submitted successfully.</div>';
+            // } catch(err){ resultMessage.innerHTML = `<div style="color:#b91c1c">Submission failed: ${err.message}</div>` }
+
+          });
+
+          // init
+          refreshSummary();
+          updateFileList();
+
+        })();
+    </script>
+</body>
+</html>
+
