@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using PROG_POE_CMCS.Data;
 
@@ -10,9 +11,11 @@ using PROG_POE_CMCS.Data;
 namespace PROG_POE_CMCS.Migrations
 {
     [DbContext(typeof(PROG_POE_CMCSContext))]
-    partial class PROG_POE_CMCSContextModelSnapshot : ModelSnapshot
+    [Migration("20251019091514_MoreTables")]
+    partial class MoreTables
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

@@ -20,7 +20,15 @@ namespace PROG_POE_CMCS.Controllers
         }
 
         // GET: Claims
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Lecturer()
+        {
+            return View(await _context.Claim.ToListAsync());
+        }
+        public async Task<IActionResult> Coordinator()
+        {
+            return View(await _context.Claim.ToListAsync());
+        }
+        public async Task<IActionResult> Manager()
         {
             return View(await _context.Claim.ToListAsync());
         }

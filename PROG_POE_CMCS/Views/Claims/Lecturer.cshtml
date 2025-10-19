@@ -1,7 +1,7 @@
 ﻿@model IEnumerable<PROG_POE_CMCS.Models.Claim>
 
 @{
-    ViewData["Title"] = "Claim View";
+    ViewData["Title"] = "Lecturer View";
 }
 
 <h1>Claim View(Lecturer)</h1>
@@ -43,7 +43,6 @@
                 @Html.DisplayFor(modelItem => item.Notes)
             </td>
             <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
                 <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
                 <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
             </td>
