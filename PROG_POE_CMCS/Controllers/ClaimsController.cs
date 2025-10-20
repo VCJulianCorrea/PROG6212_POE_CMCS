@@ -189,6 +189,49 @@ namespace PROG_POE_CMCS.Controllers
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Approve(int id)
+        {
+            var claim = await _context.Claim.FindAsync(id);
+            if (claim == null)
+                return NotFound();
+
+            claim.Condition = "Approved";
+            _context.Update(claim);
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction(nameof(Coordinator));
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Verify(int id)
+        {
+            var claim = await _context.Claim.FindAsync(id);
+            if (claim == null)
+                return NotFound();
+
+            claim.Condition = "Verified";
+            _context.Update(claim);
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction(nameof(Coordinator));
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Reject(int id)
+        {
+            var claim = await _context.Claim.FindAsync(id);
+            if (claim == null)
+                return NotFound();
+
+            claim.Condition = "Rejected";
+            _context.Update(claim);
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction(nameof(Coordinator));
+        }
 
         private bool ClaimExists(int id)
         {
