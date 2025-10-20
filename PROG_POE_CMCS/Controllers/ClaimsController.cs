@@ -1,22 +1,27 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Hosting;
+using PROG_POE_CMCS.Data;
+using PROG_POE_CMCS.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
-using PROG_POE_CMCS.Data;
-using PROG_POE_CMCS.Models;
 
 namespace PROG_POE_CMCS.Controllers
 {
     public class ClaimsController : Controller
     {
         private readonly PROG_POE_CMCSContext _context;
-
-        public ClaimsController(PROG_POE_CMCSContext context)
+        private readonly string _uploadPath;
+        public ClaimsController(PROG_POE_CMCSContext context, IWebHostEnvironment environment)
         {
             _context = context;
+            _uploadPath = Path.Combine(environment.WebRootPath, "uploads");
+
+            if (!Directory.Exists(_uploadPath))
+                Directory.CreateDirectory(_uploadPath);
         }
 
         // GET: Claims

@@ -15,5 +15,6 @@ namespace PROG_POE_CMCS.Data
         }
 
         public DbSet<PROG_POE_CMCS.Models.Claim> Claim { get; set; } = default!;
+        public DbSet<Document> Documents { get; set; }
     }
 }
