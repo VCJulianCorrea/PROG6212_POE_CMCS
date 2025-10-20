@@ -72,6 +72,7 @@ namespace PROG_POE_CMCS.Controllers
 
             _context.Add(claim);
             await _context.SaveChangesAsync();
+            claim.Condition = "Getting Reviewed";
 
             if (attachments != null && attachments.Count > 0)
             {

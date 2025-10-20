@@ -164,7 +164,6 @@
           rateInput.addEventListener('input', refreshSummary);
           calcBtn.addEventListener('click', refreshSummary);
 
-          // file handling UI
           function updateFileList(){
             fileList.innerHTML = '';
             if(files.length === 0){
@@ -183,7 +182,6 @@
           function handleFiles(selected){
             const incoming = Array.from(selected);
             if(files.length + incoming.length > MAX_FILES){ alert(`You can upload up to ${MAX_FILES} files.`); return; }
-            // simple total size check
             const currentSize = files.reduce((s,f)=>s+f.size,0);
             const incomingSize = incoming.reduce((s,f)=>s+f.size,0);
             if(currentSize + incomingSize > MAX_TOTAL_SIZE){ alert('Total upload size exceeds 25 MB limit.'); return; }
@@ -191,7 +189,6 @@
             updateFileList();
           }
 
-          // drag & drop
           ['dragenter','dragover'].forEach(ev=> fileDrop.addEventListener(ev, e=>{ e.preventDefault(); fileDrop.style.borderColor='#c7def8'; }));
           ['dragleave','drop'].forEach(ev=> fileDrop.addEventListener(ev, e=>{ e.preventDefault(); fileDrop.style.borderColor='#e2e8f0'; }));
           fileDrop.addEventListener('drop', e=>{ if(e.dataTransfer && e.dataTransfer.files) handleFiles(e.dataTransfer.files); });
@@ -202,7 +199,6 @@
             form.submit();
             resultMessage.innerHTML='';
 
-            // basic validation
             const title = document.getElementById('claimTitle').value.trim();
             const desc = document.getElementById('claimDesc').value.trim();
             const h = parseFloat(hoursInput.value) || 0;
@@ -212,7 +208,6 @@
             if(h <= 0){ alert('Please enter a value greater than 0.'); return; }
             if(r < 0){ alert('Please enter a valid rate.'); return; }
 
-            // create FormData to send to server endpoint
             const fd = new FormData();
             fd.append('title', title);
             fd.append('description', desc);
@@ -221,12 +216,12 @@
             fd.append('notes', document.getElementById('notes').value || '');
             files.forEach((f, i)=> fd.append('attachments', f));
 
-            // demo: show payload summary instead of actually sending
+
             resultMessage.innerHTML = `<div class="success">Preparing to submit claim — <strong>${title}</strong>. Files: ${files.length}. Total: ${formatCurrency(h * r)}</div>`;
 
           });
 
-          // init
+
           refreshSummary();
           updateFileList();
 
