@@ -24,7 +24,12 @@
             <th>
                 @Html.DisplayNameFor(model => model.Notes)
             </th>
-            <th></th>
+            <th>
+                @Html.DisplayNameFor(model => model.Condition)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Documents)
+            </th>
         </tr>
     </thead>
     <tbody>
@@ -41,6 +46,27 @@
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Notes)
+            </td>
+            <td>
+                 @Html.DisplayFor(modelItem => item.Condition)
+            </td>
+             <td>
+                 @if (item.Documents != null && item.Documents.Any())
+                 {
+                     <h6>Attached Documents</h6>
+                     <ul>
+                         @foreach (var doc in item.Documents)
+                         {
+                             <li>
+                                 <a href="@doc.FilePath" target="_blank">@doc.FileName</a>
+                             </li>
+                         }
+                     </ul>
+                 }
+                 else
+                 {
+                     <span>No documents</span>
+                 }
             </td>
             <td>
                 <a asp-action="Details" asp-route-id="@item.Id">Details</a> |

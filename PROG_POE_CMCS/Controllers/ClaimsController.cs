@@ -63,19 +63,46 @@ namespace PROG_POE_CMCS.Controllers
         }
 
         // POST: Claims/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Description,HoursWorked,HourlyRate,Notes")] Claim claim)
+        public async Task<IActionResult> Create(Claim claim, List<IFormFile> attachments)
         {
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
+                return View(claim);
+
+            _context.Add(claim);
+            await _context.SaveChangesAsync();
+
+            if (attachments != null && attachments.Count > 0)
             {
-                _context.Add(claim);
+                foreach (var file in attachments)
+                {
+                    if (file.Length > 0)
+                    {
+                        var filePath = Path.Combine(_uploadPath, file.FileName);
+
+                        using (var stream = new FileStream(filePath, FileMode.Create))
+                        {
+                            await file.CopyToAsync(stream);
+                        }
+
+                        var document = new ClaimDocument
+                        {
+                            ClaimId = claim.Id,
+                            FileName = file.FileName,
+                            FilePath = "/uploads/" + file.FileName,
+                            ContentType = file.ContentType,
+                            UploadDate = DateTime.Now
+                        };
+
+                        _context.ClaimDocuments.Add(document);
+                    }
+                }
+
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
             }
-            return View(claim);
+
+            return RedirectToAction(nameof(Lecturer));
         }
 
         // GET: Claims/Edit/5
@@ -99,7 +126,7 @@ namespace PROG_POE_CMCS.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Description,HoursWorked,HourlyRate,Notes")] Claim claim)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Description,HoursWorked,HourlyRate,Notes,FileName,FilePath,UploadDate,ContentType")] Claim claim)
         {
             if (id != claim.Id)
             {

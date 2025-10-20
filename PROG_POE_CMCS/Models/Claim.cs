@@ -12,5 +12,6 @@ namespace PROG_POE_CMCS.Models
         public double HourlyRate { get; set; }
         public string Notes { get; set; }
         public string Condition { get; set; }
+        public ICollection<ClaimDocument> Documents { get; set; }
     }
 }

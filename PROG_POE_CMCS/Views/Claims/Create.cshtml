@@ -54,7 +54,7 @@
             </div>
         </header>
 
-        <form id="claimForm" class="card" novalidate>
+        <form asp-action="Create" asp-controller="Claims" method="post" enctype="multipart/form-data" class="card">
             <div class="grid">
                 <div>
                     <div class="field">
@@ -63,21 +63,21 @@
                     </div>
 
                     <div class="field">
-                        <label for="claimDesc">Description</label>
-                        <textarea id="claimDesc" name="claimDesc" placeholder="Work, reason for claim, dates, etc." required></textarea>
+                        <label for="Description">Description</label>
+                        <textarea id="Description" name="claimDesc" placeholder="Work, reason for claim, dates, etc." required></textarea>
                     </div>
 
                     <div class="row">
                         <div class="field" style="flex:1">
-                            <label for="hours">Hours Worked</label>
-                            <input id="hours" name="hours" type="number" inputmode="numeric" step="1" min="0" placeholder="0" required />
+                            <label for="HoursWorked">Hours Worked</label>
+                            <input id="HoursWorked" name="hours" type="number" inputmode="numeric" step="1" min="0" placeholder="0" required />
                         </div>
 
                         <div class="field" style="width:220px">
-                            <label for="rate">Hourly Rate</label>
+                            <label for="HourlyRate">Hourly Rate</label>
                             <div style="display:flex;gap:8px;align-items:center">
                                 <span class="muted">R</span>
-                                <input id="rate" name="rate" type="number" inputmode="decimal" step="0.01" min="0" placeholder="0.00" style="flex:1" required />
+                                <input id="HourlyRate" name="rate" type="number" inputmode="decimal" step="0.01" min="0" placeholder="0.00" style="flex:1" required />
                             </div>
                         </div>
                     </div>
@@ -86,8 +86,8 @@
                         <label for="attachments">Supporting documents</label>
                         <div id="fileDrop" class="file-drop" tabindex="0">
                             <input id="attachments" name="attachments" type="file" accept=".pdf,.doc,.docx,.jpg,.jpeg,.png" multiple style="display:none" />
-                            <div id="fileDropText">Click or drag files here to upload (PDF, DOC, images). Max 10 files.</div>
-                            <div class="note">You can select multiple files. Maximum total size per upload: 25 MB (client-side check).</div>
+                            <div id="fileDropText">Click or drag files here.</div>
+                            <div class="note">You can select multiple files.</div>
                         </div>
                         <div id="fileList" class="file-list" aria-live="polite"></div>
                     </div>
@@ -199,9 +199,7 @@
           fileInput.addEventListener('change', e=> handleFiles(e.target.files));
           fileDrop.addEventListener('keydown', e=>{ if(e.key === 'Enter' || e.key === ' ') { e.preventDefault(); fileInput.click(); } });
 
-          // form submit (demo - replace with real submission)
-          form.addEventListener('submit', async (e)=>{
-            e.preventDefault();
+            form.submit();
             resultMessage.innerHTML='';
 
             // basic validation

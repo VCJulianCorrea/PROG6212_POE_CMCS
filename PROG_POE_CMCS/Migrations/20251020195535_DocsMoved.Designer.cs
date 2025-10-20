@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using PROG_POE_CMCS.Data;
 
@@ -11,9 +12,11 @@ using PROG_POE_CMCS.Data;
 namespace PROG_POE_CMCS.Migrations
 {
     [DbContext(typeof(PROG_POE_CMCSContext))]
-    partial class PROG_POE_CMCSContextModelSnapshot : ModelSnapshot
+    [Migration("20251020195535_DocsMoved")]
+    partial class DocsMoved
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -34,7 +37,19 @@ namespace PROG_POE_CMCS.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("ContentType")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("FileName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("FilePath")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -48,58 +63,12 @@ namespace PROG_POE_CMCS.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("Id");
-
-                    b.ToTable("Claim");
-                });
-
-            modelBuilder.Entity("PROG_POE_CMCS.Models.ClaimDocument", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("ClaimId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("ContentType")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("FileName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("FilePath")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<DateTime>("UploadDate")
                         .HasColumnType("datetime2");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ClaimId");
-
-                    b.ToTable("ClaimDocuments");
-                });
-
-            modelBuilder.Entity("PROG_POE_CMCS.Models.ClaimDocument", b =>
-                {
-                    b.HasOne("PROG_POE_CMCS.Models.Claim", "Claim")
-                        .WithMany("Documents")
-                        .HasForeignKey("ClaimId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Claim");
-                });
-
-            modelBuilder.Entity("PROG_POE_CMCS.Models.Claim", b =>
-                {
-                    b.Navigation("Documents");
+                    b.ToTable("Claim");
                 });
 #pragma warning restore 612, 618
         }
