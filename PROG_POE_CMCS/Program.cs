@@ -26,6 +26,7 @@ namespace PROG_POE_CMCS
 
             app.UseHttpsRedirection();
             app.UseRouting();
+            app.UseStaticFiles();
 
             app.UseAuthorization();
 
