@@ -68,8 +68,8 @@
                 </td>
                 <td>
                     <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                    <button asp-action="Verify" type="button" class="alert-success">Verify</button> |
-                    <button asp-action="Reject" type="button" class="alert-danger">Reject</button>
+                    <a asp-action="Verify" class="btn alert-success">Verify</a> |
+                    <a asp-action="Reject" class="btn alert-danger">Reject</a>
                 </td>
             </tr>
         }

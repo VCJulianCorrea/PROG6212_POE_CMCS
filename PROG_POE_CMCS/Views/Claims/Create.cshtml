@@ -120,7 +120,7 @@
             </div>
 
             <div class="actions">
-                <button type="button" class="ghost" asp-action="Lecturer">Cancel</button>
+                <a class="btn btn-ghost" asp-action="Lecturer">Cancel</a>
                 <button type="reset" class="btn btn-secondary">Reset</button>
                 <button type="submit" class="primary">Submit claim</button>
             </div>
@@ -146,7 +146,7 @@
 
           let files = [];
           const MAX_FILES = 10;
-          const MAX_TOTAL_SIZE = 25 * 1024 * 1024; // 25MB
+          const MAX_TOTAL_SIZE = 26214400;
 
           function formatCurrency(num){
             return 'R ' + Number(num || 0).toLocaleString(undefined,{minimumFractionDigits:2,maximumFractionDigits:2});
@@ -181,10 +181,10 @@
 
           function handleFiles(selected){
             const incoming = Array.from(selected);
-            if(files.length + incoming.length > MAX_FILES){ alert(`You can upload up to ${MAX_FILES} files.`); return; }
+            if(files.length + incoming.length > MAX_FILES){ alert(`You can upload up to {0} files.`, MAX_FILES); return; }
             const currentSize = files.reduce((s,f)=>s+f.size,0);
             const incomingSize = incoming.reduce((s,f)=>s+f.size,0);
-            if(currentSize + incomingSize > MAX_TOTAL_SIZE){ alert('Total upload size exceeds 25 MB limit.'); return; }
+            if(currentSize + incomingSize > MAX_TOTAL_SIZE){ alert('Total upload size exceeds {0} bytes limit.', MAX_TOTAL_SIZE); return; }
             files = files.concat(incoming);
             updateFileList();
           }
@@ -203,7 +203,7 @@
             const desc = document.getElementById('claimDesc').value.trim();
             const h = parseFloat(hoursInput.value) || 0;
             const r = parseFloat(rateInput.value) || 0;
-            if(!title){ alert('Please provide a claim.'); return; }
+            if(!title){ alert('Please add claim.'); return; }
             if(!desc){ alert('Please add description.'); return; }
             if(h <= 0){ alert('Please enter a value greater than 0.'); return; }
             if(r < 0){ alert('Please enter a valid rate.'); return; }
