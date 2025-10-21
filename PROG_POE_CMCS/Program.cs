@@ -40,3 +40,12 @@ namespace PROG_POE_CMCS
         }
     }
 }
+
+/* References:
+ * 
+ * tdykstra (2024). Upload files in ASP.NET Core. [online] Microsoft.com. Available at: https://learn.microsoft.com/en-us/aspnet/core/mvc/models/file-uploads?view=aspnetcore-9.0.
+ * Rathod, J. (2019). How to Enable Theme Customization Dynamically in ASP.NET? [online] Satva Solutions. Available at: https://satvasolutions.com/blog/enable-theme-customization-dynamically-using-asp-net-mvc [Accessed 21 Oct. 2025].
+ * Webdevtutor.net. (2024). Handling Button Click Event in C# MVC. [online] Available at: https://www.webdevtutor.net/blog/c-sharp-mvc-button-click-event [Accessed 21 Oct. 2025].
+ * Microsoft.com. (2022). Format currency in asp-validation-for - Microsoft Q&A. [online] Available at: https://learn.microsoft.com/en-us/answers/questions/770320/format-currency-in-asp-validation-for [Accessed 21 Oct. 2025].
+ * Rafiq, Z. (2023). Security ASP.net Core MVC (C#) Encryption and Decryption. [online] C-sharpcorner.com. Available at: https://www.c-sharpcorner.com/article/the-encryption-and-decryption-of-asp-net-core-mvc-c-sharp/.
+ */
